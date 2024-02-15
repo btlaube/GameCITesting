@@ -23,9 +23,20 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: My project/
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: My project/Library
+          key: Library-My project-Android
+          restore-keys: |
+            Library-MyProjectName-
+            Library-
           
       #Upload
       - uses: actions/upload-artifact@v3
         with:
           name: Build.apk
           path: build/
+
+      
