@@ -12,6 +12,15 @@ jobs:
       # Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: My project/Library
+          key: Library-My project-Android
+          restore-keys: |
+            Library-MyProjectName-
+            Library-
 
       # Build
       - name: Build project
@@ -23,15 +32,6 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: My project/
-
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: My project/Library
-          key: Library-My project-Android
-          restore-keys: |
-            Library-MyProjectName-
-            Library-
           
       #Upload
       - uses: actions/upload-artifact@v3
