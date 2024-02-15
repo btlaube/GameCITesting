@@ -5,51 +5,71 @@ run-name: ${{ github.actor }} is testing out GameCI Implementation 🚀
 on: [push]
 
 jobs:
-  Unity-Builder:
-    name: Unity Project Builder
-    permissions: write-all
+  free-disk-space:
     runs-on: ubuntu-latest
     steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v4
+
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        # this might remove tools that are actually needed,
+        # if set to "true" but frees about 6 GB
+        tool-cache: false
         
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: My project/Library
-          key: Library-My project-Android
-          restore-keys: |
-            Library-MyProjectName-
-            Library-
-
-      # Test
-      - name: Run tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          projectPath: My project/
-
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          targetPlatform: Android
-          projectPath: My project/
-          allowDirtyBuild: true
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+      
+  Unity-Builder:
+      name: Unity Project Builder
+      permissions: write-all
+      runs-on: ubuntu-latest
+      steps:
+        # Checkout
+        - name: Checkout repository
+          uses: actions/checkout@v4
           
-      #Upload
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build.apk
-          path: build/
+        # Cache
+        - uses: actions/cache@v3
+          with:
+            path: My project/Library
+            key: Library-My project-Android
+            restore-keys: |
+              Library-MyProjectName-
+              Library-
+  
+        # Test
+        - name: Run tests
+          uses: game-ci/unity-test-runner@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            githubToken: ${{ secrets.GITHUB_TOKEN }}
+            projectPath: My project/
+  
+        # Build
+        - name: Build project
+          uses: game-ci/unity-builder@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            targetPlatform: Android
+            projectPath: My project/
+            allowDirtyBuild: true
+            
+        #Upload
+        - uses: actions/upload-artifact@v3
+          with:
+            name: Build.apk
+            path: build/
 
       
