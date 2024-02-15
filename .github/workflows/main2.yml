@@ -7,6 +7,7 @@ on: [push]
 jobs:
   Unity-Builder:
     name: Unity Project Builder
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       # Checkout
