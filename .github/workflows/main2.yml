@@ -22,4 +22,4 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: Android
-          projectPath: XRSurvive/
+          projectPath: My project/
