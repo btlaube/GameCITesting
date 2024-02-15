@@ -23,3 +23,9 @@ jobs:
         with:
           targetPlatform: Android
           projectPath: My project/
+          
+      #Upload
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build.apk
+          path: build/
